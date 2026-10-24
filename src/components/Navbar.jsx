@@ -16,6 +16,14 @@ export default function Navbar({ recipientName, theme = 'dark', onToggleTheme, o
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = audioManager.subscribe((playing) => {
+      setIsPlayingMusic(playing);
+    });
+    setIsPlayingMusic(audioManager.isPlaying);
+    return unsubscribe;
+  }, []);
+
   const triggerConfettiExplosion = () => {
     audioManager.playChime(true);
     const count = 200;
@@ -42,12 +50,8 @@ export default function Navbar({ recipientName, theme = 'dark', onToggleTheme, o
   const handleToggleMusic = () => {
     if (isPlayingMusic) {
       audioManager.stopSong();
-      setIsPlayingMusic(false);
     } else {
-      audioManager.playSong(() => {
-        setIsPlayingMusic(false);
-      });
-      setIsPlayingMusic(true);
+      audioManager.playSong(undefined, 44);
     }
   };
 

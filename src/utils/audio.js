@@ -5,15 +5,65 @@ class AudioManager {
     this.audioElement = null;
     this.isPlaying = false;
     this.isMuted = false;
-    this.songTitle = "Jab Koi Baat Bigad Jaaye";
+    this.listeners = [];
+    this.hasSeekedInitial = false;
+    this.songTitle = "Jab Koi Baat Bigad Jaye";
+    this.musicSrc = '/music/' + encodeURIComponent('Jab Koi Baat Bigad Jaye_320(KoshalWorld.Com).mp3');
+  }
+
+  subscribe(callback) {
+    this.listeners.push(callback);
+    return () => {
+      this.listeners = this.listeners.filter((cb) => cb !== callback);
+    };
+  }
+
+  notify(isPlaying) {
+    this.isPlaying = isPlaying;
+    this.listeners.forEach((cb) => {
+      try {
+        cb(isPlaying);
+      } catch {}
+    });
   }
 
   initAudio() {
     if (!this.audioElement && typeof window !== 'undefined') {
-      this.audioElement = new Audio('/music/jab_koi_baat.mp3');
+      this.audioElement = new Audio(this.musicSrc);
       this.audioElement.loop = true;
       this.audioElement.volume = 0.85;
       this.audioElement.muted = this.isMuted;
+      this.audioElement.preload = 'auto';
+
+      this.audioElement.addEventListener('play', () => {
+        this.notify(true);
+      });
+
+      this.audioElement.addEventListener('pause', () => {
+        this.notify(false);
+      });
+
+      this.audioElement.addEventListener('ended', () => {
+        this.notify(false);
+      });
+    }
+  }
+
+  seekTo(seconds) {
+    this.initAudio();
+    if (!this.audioElement) return;
+
+    if (this.audioElement.readyState >= 1) {
+      try {
+        this.audioElement.currentTime = seconds;
+      } catch {}
+    } else {
+      const handleMetadata = () => {
+        try {
+          this.audioElement.currentTime = seconds;
+        } catch {}
+      };
+      this.audioElement.addEventListener('loadedmetadata', handleMetadata, { once: true });
     }
   }
 
@@ -29,38 +79,50 @@ class AudioManager {
     }
   }
 
-  // Play "Jab Koi Baat Bigad Jaaye"
-  playSong(onEnd) {
+  // Play "Jab Koi Baat Bigad Jaaye", starting from 44s if starting fresh
+  playSong(onEnd, targetTime = 44) {
     this.initAudio();
-    if (!this.audioElement) return;
+    if (!this.audioElement) return Promise.reject(new Error('Audio not supported'));
+
+    if (!this.hasSeekedInitial && targetTime !== null) {
+      this.seekTo(targetTime);
+      this.hasSeekedInitial = true;
+    } else if (this.audioElement.currentTime < 1 && targetTime !== null) {
+      this.seekTo(targetTime);
+    }
 
     this.audioElement.muted = this.isMuted;
     const playPromise = this.audioElement.play();
 
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          this.isPlaying = true;
-        })
-        .catch(() => {
-          // In case user hasn't interacted or browser blocked, fallback to synthesized melody
-          this.playSynthesizedJabKoiBaat(onEnd);
-        });
-    }
-
     if (onEnd) {
       this.audioElement.onended = () => {
-        this.isPlaying = false;
+        this.notify(false);
         onEnd();
       };
     }
+
+    if (playPromise !== undefined) {
+      return playPromise
+        .then(() => {
+          this.notify(true);
+          return true;
+        })
+        .catch((err) => {
+          this.notify(false);
+          // If browser policy blocked playback, return rejected promise so caller knows
+          return Promise.reject(err);
+        });
+    }
+
+    this.notify(true);
+    return Promise.resolve(true);
   }
 
   stopSong() {
-    this.isPlaying = false;
     if (this.audioElement) {
       this.audioElement.pause();
     }
+    this.notify(false);
     if (this.currentTimeoutIds) {
       this.currentTimeoutIds.forEach((id) => clearTimeout(id));
       this.currentTimeoutIds = [];
@@ -72,8 +134,37 @@ class AudioManager {
       this.stopSong();
       return false;
     } else {
-      this.playSong(onEnd);
+      this.playSong(onEnd, 44);
       return true;
+    }
+  }
+
+  // Automatic playback beginning at 44s, with robust interaction fallback for browser autoplay policies
+  autoPlay(startTime = 44) {
+    this.seekTo(startTime);
+
+    const tryPlay = () => {
+      this.playSong(undefined, startTime).catch(() => {
+        // Autoplay blocked: wait for very first user click, touch, or keypress anywhere on screen
+        const startOnGesture = () => {
+          this.playSong(undefined, startTime).catch(() => {});
+          ['click', 'touchstart', 'pointerdown', 'keydown', 'scroll'].forEach((evt) => {
+            window.removeEventListener(evt, startOnGesture, true);
+          });
+        };
+
+        ['click', 'touchstart', 'pointerdown', 'keydown', 'scroll'].forEach((evt) => {
+          window.addEventListener(evt, startOnGesture, { once: true, capture: true });
+        });
+      });
+    };
+
+    if (typeof window !== 'undefined') {
+      if (document.readyState === 'complete') {
+        tryPlay();
+      } else {
+        window.addEventListener('load', tryPlay, { once: true });
+      }
     }
   }
 

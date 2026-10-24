@@ -46,8 +46,10 @@ function App() {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  // Initial welcome burst of celebratory confetti
+  // Initial welcome burst of celebratory confetti & auto play song from 44s
   useEffect(() => {
+    audioManager.autoPlay(44);
+
     const timer = setTimeout(() => {
       confetti({
         particleCount: 70,
