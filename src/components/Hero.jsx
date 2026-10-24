@@ -32,8 +32,8 @@ export default function Hero({ recipientName, onBlowCandlesClick, onOpenLetter }
         </h1>
 
         {/* Heartfelt Subtitle */}
-        <p className="max-w-2xl text-sm sm:text-lg md:text-xl text-zinc-300 font-light leading-relaxed mb-6 sm:mb-8 px-4">
-          Wishing you a year filled with endless laughter, gentle peace, thrilling adventures, and every bit of magic your heart can hold. Here's to all our sweetest memories!
+        <p className="max-w-3xl text-sm sm:text-lg md:text-xl text-zinc-300 font-light leading-relaxed mb-6 sm:mb-8 px-4">
+          I hope this year brings you happiness, new adventures, and beautiful memories, along with exciting opportunities to grow and succeed in your nursing career. May your hard work pay off, your dreams take shape, and your kindness touch countless lives. Here’s to new beginnings, little victories, endless laughter, and all the wonderful moments still waiting for us.
         </p>
 
         {/* Dynamic Photo Showcase Preview (Trio of featured photos, perfectly responsive) */}
