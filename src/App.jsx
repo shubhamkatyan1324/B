@@ -7,22 +7,44 @@ import InteractiveCake from './components/InteractiveCake';
 import WhyYouAreSpecial from './components/WhyYouAreSpecial';
 import VirtualGiftBox from './components/VirtualGiftBox';
 import BirthdayLetterModal from './components/BirthdayLetterModal';
-import EditNameModal from './components/EditNameModal';
 import Footer from './components/Footer';
 import confetti from 'canvas-confetti';
 import { audioManager } from './utils/audio';
 
 function App() {
   const [recipientName, setRecipientName] = useState(() => {
-    return localStorage.getItem('birthday_person_name') || 'My Favorite Person';
+    const saved = localStorage.getItem('birthday_person_name');
+    if (!saved || saved === 'My Favorite Person') {
+      localStorage.setItem('birthday_person_name', 'Dipa');
+      return 'Dipa';
+    }
+    return saved;
+  });
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('birthday_theme') || 'dark';
   });
 
   const [isLetterOpen, setIsLetterOpen] = useState(false);
-  const [isEditNameOpen, setIsEditNameOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('birthday_person_name', recipientName);
   }, [recipientName]);
+
+  useEffect(() => {
+    localStorage.setItem('birthday_theme', theme);
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+      document.documentElement.classList.remove('dark-theme');
+    } else {
+      document.documentElement.classList.add('dark-theme');
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Initial welcome burst of celebratory confetti
   useEffect(() => {
@@ -45,14 +67,21 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1319] text-[#e8f0ec] relative selection:bg-[#881337] selection:text-white overflow-x-hidden font-sans-modern">
+    <div
+      className={`min-h-screen transition-colors duration-500 relative selection:bg-[#881337] selection:text-white overflow-x-hidden font-sans-modern ${
+        theme === 'light'
+          ? 'bg-[#f6f9f7] text-[#1a2920] light-theme'
+          : 'bg-[#0b1319] text-[#e8f0ec] dark-theme'
+      }`}
+    >
       {/* Floating Animated Balloons in modern colors */}
       <FloatingBalloons />
 
       {/* Top Navbar */}
       <Navbar
         recipientName={recipientName}
-        onEditName={() => setIsEditNameOpen(true)}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
         onOpenLetter={() => setIsLetterOpen(true)}
       />
 
@@ -86,13 +115,6 @@ function App() {
         isOpen={isLetterOpen}
         onClose={() => setIsLetterOpen(false)}
         recipientName={recipientName}
-      />
-
-      <EditNameModal
-        isOpen={isEditNameOpen}
-        onClose={() => setIsEditNameOpen(false)}
-        currentName={recipientName}
-        onSaveName={(name) => setRecipientName(name)}
       />
     </div>
   );

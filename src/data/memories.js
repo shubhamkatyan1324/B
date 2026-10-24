@@ -54,7 +54,7 @@ export const photoMemories = [
     url: "/pics/attachments/1000296787.jpg",
     title: "Cozy Mirror Check",
     caption: "Matching styles, effortless chemistry, and cute phone mirror clicks.",
-    category: "Adventures",
+    category: "Mirror",
     tag: "Everyday Magic",
     color: "azul",
     rotation: "rotate-1"
@@ -74,7 +74,7 @@ export const photoMemories = [
     url: "/pics/attachments/1000296763.jpg",
     title: "Candid Perfection",
     caption: "Because candid pictures capture real feelings that staged poses never can.",
-    category: "Adventures",
+    category: "Mirror",
     tag: "Candid",
     color: "wine",
     rotation: "rotate-2"
@@ -202,7 +202,7 @@ export const loveReasons = [
     id: 3,
     title: "Your Playful Spirit",
     subtitle: "Adventures & giggles",
-    description: "From spontaneous mirror clicks to silly festival dances, life with you is never dull for a single second.",
+    description: "From spontaneous mirror clicks to endless walks under fairy lights and goofy jokes, life with you is never dull for a single second.",
     color: "azul",
     icon: "Smile"
   },

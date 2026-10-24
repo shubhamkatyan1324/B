@@ -1,14 +1,24 @@
-// Web Audio API Birthday Melodies & Sound Effects
+// Audio Manager for "Jab Koi Baat Bigad Jaaye" & Interactive Sound Effects
 class AudioManager {
   constructor() {
     this.ctx = null;
+    this.audioElement = null;
     this.isPlaying = false;
     this.isMuted = false;
-    this.currentTimeoutIds = [];
+    this.songTitle = "Jab Koi Baat Bigad Jaaye";
   }
 
-  init() {
-    if (!this.ctx) {
+  initAudio() {
+    if (!this.audioElement && typeof window !== 'undefined') {
+      this.audioElement = new Audio('/music/jab_koi_baat.mp3');
+      this.audioElement.loop = true;
+      this.audioElement.volume = 0.85;
+      this.audioElement.muted = this.isMuted;
+    }
+  }
+
+  initSynthContext() {
+    if (!this.ctx && typeof window !== 'undefined') {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (AudioContext) {
         this.ctx = new AudioContext();
@@ -19,7 +29,65 @@ class AudioManager {
     }
   }
 
+  // Play "Jab Koi Baat Bigad Jaaye"
+  playSong(onEnd) {
+    this.initAudio();
+    if (!this.audioElement) return;
+
+    this.audioElement.muted = this.isMuted;
+    const playPromise = this.audioElement.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isPlaying = true;
+        })
+        .catch(() => {
+          // In case user hasn't interacted or browser blocked, fallback to synthesized melody
+          this.playSynthesizedJabKoiBaat(onEnd);
+        });
+    }
+
+    if (onEnd) {
+      this.audioElement.onended = () => {
+        this.isPlaying = false;
+        onEnd();
+      };
+    }
+  }
+
+  stopSong() {
+    this.isPlaying = false;
+    if (this.audioElement) {
+      this.audioElement.pause();
+    }
+    if (this.currentTimeoutIds) {
+      this.currentTimeoutIds.forEach((id) => clearTimeout(id));
+      this.currentTimeoutIds = [];
+    }
+  }
+
+  toggleSong(onEnd) {
+    if (this.isPlaying) {
+      this.stopSong();
+      return false;
+    } else {
+      this.playSong(onEnd);
+      return true;
+    }
+  }
+
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    if (this.audioElement) {
+      this.audioElement.muted = this.isMuted;
+    }
+    return this.isMuted;
+  }
+
+  // Interactive Sound Effects (Web Audio API)
   playNote(frequency, startTime, duration, type = 'sine', volume = 0.2) {
+    this.initSynthContext();
     if (!this.ctx || this.isMuted) return;
 
     try {
@@ -29,7 +97,6 @@ class AudioManager {
       osc.type = type;
       osc.frequency.setValueAtTime(frequency, startTime);
 
-      // Smooth envelope
       gain.gain.setValueAtTime(0, startTime);
       gain.gain.linearRampToValueAtTime(volume, startTime + 0.04);
       gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
@@ -45,7 +112,7 @@ class AudioManager {
   }
 
   playChime(highPitch = false) {
-    this.init();
+    this.initSynthContext();
     if (!this.ctx || this.isMuted) return;
 
     const baseNotes = highPitch ? [523.25, 659.25, 783.99, 1046.50] : [261.63, 329.63, 392.00, 523.25];
@@ -56,11 +123,10 @@ class AudioManager {
   }
 
   playBlowSound() {
-    this.init();
+    this.initSynthContext();
     if (!this.ctx || this.isMuted) return;
 
     try {
-      // Wind / breath noise synthesized with buffer
       const bufferSize = this.ctx.sampleRate * 0.5;
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -86,7 +152,6 @@ class AudioManager {
 
       noise.start();
 
-      // Magic chime afterward
       setTimeout(() => {
         this.playChime(true);
       }, 350);
@@ -96,7 +161,7 @@ class AudioManager {
   }
 
   playPopSound() {
-    this.init();
+    this.initSynthContext();
     if (!this.ctx || this.isMuted) return;
 
     try {
@@ -120,42 +185,49 @@ class AudioManager {
     }
   }
 
-  playHappyBirthdaySong(onEnd) {
-    this.init();
-    this.stopSong();
+  // Synthesized fallback for Jab Koi Baat Bigad Jaaye
+  playSynthesizedJabKoiBaat(onEnd) {
+    this.initSynthContext();
+    if (!this.ctx) return;
     this.isPlaying = true;
+    this.currentTimeoutIds = [];
 
-    // Frequencies (Hz) for Happy Birthday in Key of C
-    // C4=261.63, D4=293.66, E4=329.63, F4=349.23, G4=392.00, A4=440.00, B4=493.88, C5=523.25
+    // Frequencies: C4=261.63, D4=293.66, E4=329.63, F4=349.23, G4=392.00, A4=440.00, B4=493.88, C5=523.25
     const notes = [
-      { f: 261.63, d: 0.35, gap: 0.4 },  // Hap-
-      { f: 261.63, d: 0.35, gap: 0.4 },  // py
-      { f: 293.66, d: 0.7, gap: 0.75 },  // birth-
-      { f: 261.63, d: 0.7, gap: 0.75 },  // day
-      { f: 349.23, d: 0.7, gap: 0.75 },  // to
-      { f: 329.63, d: 1.2, gap: 1.3 },   // you
+      // Jab koi baat bigad jaaye
+      { f: 261.63, d: 0.35, gap: 0.4 },
+      { f: 293.66, d: 0.35, gap: 0.4 },
+      { f: 329.63, d: 0.4, gap: 0.45 },
+      { f: 329.63, d: 0.4, gap: 0.45 },
+      { f: 329.63, d: 0.4, gap: 0.45 },
+      { f: 293.66, d: 0.35, gap: 0.4 },
+      { f: 261.63, d: 0.35, gap: 0.4 },
+      { f: 293.66, d: 0.8, gap: 0.9 },
 
-      { f: 261.63, d: 0.35, gap: 0.4 },  // Hap-
-      { f: 261.63, d: 0.35, gap: 0.4 },  // py
-      { f: 293.66, d: 0.7, gap: 0.75 },  // birth-
-      { f: 261.63, d: 0.7, gap: 0.75 },  // day
-      { f: 392.00, d: 0.7, gap: 0.75 },  // to
-      { f: 349.23, d: 1.2, gap: 1.3 },   // you
+      // Jab koi mushkil pad jaaye
+      { f: 293.66, d: 0.35, gap: 0.4 },
+      { f: 329.63, d: 0.35, gap: 0.4 },
+      { f: 349.23, d: 0.4, gap: 0.45 },
+      { f: 349.23, d: 0.4, gap: 0.45 },
+      { f: 349.23, d: 0.4, gap: 0.45 },
+      { f: 329.63, d: 0.35, gap: 0.4 },
+      { f: 293.66, d: 0.35, gap: 0.4 },
+      { f: 329.63, d: 0.8, gap: 0.9 },
 
-      { f: 261.63, d: 0.35, gap: 0.4 },  // Hap-
-      { f: 261.63, d: 0.35, gap: 0.4 },  // py
-      { f: 523.25, d: 0.7, gap: 0.75 },  // birth-
-      { f: 440.00, d: 0.7, gap: 0.75 },  // day
-      { f: 349.23, d: 0.7, gap: 0.75 },  // dear
-      { f: 329.63, d: 0.7, gap: 0.75 },  // [Name]
-      { f: 293.66, d: 1.0, gap: 1.1 },   // ...
+      // Tum dena saath mera
+      { f: 329.63, d: 0.35, gap: 0.4 },
+      { f: 349.23, d: 0.35, gap: 0.4 },
+      { f: 392.00, d: 0.45, gap: 0.5 },
+      { f: 392.00, d: 0.45, gap: 0.5 },
+      { f: 392.00, d: 0.45, gap: 0.5 },
+      { f: 349.23, d: 0.35, gap: 0.4 },
+      { f: 329.63, d: 0.35, gap: 0.4 },
+      { f: 349.23, d: 0.8, gap: 0.9 },
 
-      { f: 466.16, d: 0.35, gap: 0.4 },  // Hap- (Bb4)
-      { f: 466.16, d: 0.35, gap: 0.4 },  // py
-      { f: 440.00, d: 0.7, gap: 0.75 },  // birth-
-      { f: 349.23, d: 0.7, gap: 0.75 },  // day
-      { f: 392.00, d: 0.7, gap: 0.75 },  // to
-      { f: 349.23, d: 1.4, gap: 1.5 }    // you
+      // O humnawa
+      { f: 293.66, d: 0.5, gap: 0.55 },
+      { f: 329.63, d: 0.5, gap: 0.55 },
+      { f: 261.63, d: 1.2, gap: 1.4 }
     ];
 
     let currentOffset = 0.1;
@@ -163,10 +235,8 @@ class AudioManager {
 
     notes.forEach((note) => {
       const scheduledTime = now + currentOffset;
-      this.playNote(note.f, scheduledTime, note.d, 'triangle', 0.18);
-      // Add subtle harmony bell an octave higher
-      this.playNote(note.f * 2, scheduledTime, note.d * 0.4, 'sine', 0.05);
-
+      this.playNote(note.f, scheduledTime, note.d, 'triangle', 0.22);
+      this.playNote(note.f * 0.5, scheduledTime, note.d, 'sine', 0.15); // Warm bass octave
       currentOffset += note.gap;
     });
 
@@ -176,30 +246,6 @@ class AudioManager {
       if (onEnd) onEnd();
     }, totalDurationMs);
     this.currentTimeoutIds.push(tId);
-  }
-
-  stopSong() {
-    this.isPlaying = false;
-    this.currentTimeoutIds.forEach((id) => clearTimeout(id));
-    this.currentTimeoutIds = [];
-    if (this.ctx) {
-      // Quick re-init to silence ongoing osc
-      try {
-        this.ctx.close().then(() => {
-          this.ctx = null;
-        });
-      } catch {
-        this.ctx = null;
-      }
-    }
-  }
-
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    if (this.isMuted && this.isPlaying) {
-      this.stopSong();
-    }
-    return this.isMuted;
   }
 }
 

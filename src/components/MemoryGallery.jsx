@@ -12,7 +12,7 @@ export default function MemoryGallery() {
   const [slideshowIndex, setSlideshowIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
-  const categories = ['All', 'Nights & Magic', 'Sweet Smiles', 'Special Moments', 'Adventures'];
+  const categories = ['All', 'Nights & Magic', 'Sweet Smiles', 'Special Moments', 'Mirror'];
 
   const filteredMemories = activeCategory === 'All'
     ? photoMemories

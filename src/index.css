@@ -174,3 +174,109 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #5f806e;
 }
+
+/* =========================================
+   LIGHT THEME ADAPTATIONS
+   ========================================= */
+.light-theme {
+  color-scheme: light;
+}
+
+.light-theme header {
+  background-color: rgba(247, 249, 247, 0.92) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.light-theme .glass-panel {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 14px 34px -4px rgba(0, 0, 0, 0.06);
+}
+
+.light-theme .glass-panel-sage {
+  background: rgba(238, 246, 240, 0.94) !important;
+  border: 1px solid rgba(125, 157, 139, 0.35) !important;
+  box-shadow: 0 14px 34px -4px rgba(74, 107, 88, 0.08);
+}
+
+.light-theme .glass-panel-azul {
+  background: rgba(240, 246, 255, 0.94) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 14px 34px -4px rgba(37, 99, 235, 0.08);
+}
+
+.light-theme .glass-panel-wine {
+  background: rgba(254, 242, 245, 0.94) !important;
+  border: 1px solid rgba(225, 29, 72, 0.25) !important;
+  box-shadow: 0 14px 34px -4px rgba(114, 32, 53, 0.08);
+}
+
+.light-theme footer {
+  background-color: #ebf0ec !important;
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.light-theme .text-white {
+  color: #19261f !important;
+}
+
+.light-theme .text-zinc-300 {
+  color: #42554a !important;
+}
+
+.light-theme .text-zinc-400 {
+  color: #5c7064 !important;
+}
+
+.light-theme .text-zinc-500 {
+  color: #758a7e !important;
+}
+
+.light-theme .bg-black\/40,
+.light-theme .bg-black\/60,
+.light-theme .bg-black\/65,
+.light-theme .bg-black\/70,
+.light-theme .bg-black\/80 {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  color: #19261f !important;
+}
+
+.light-theme .border-white\/10,
+.light-theme .border-white\/15,
+.light-theme .border-white\/20,
+.light-theme .border-white\/30 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .bg-white\/5,
+.light-theme .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme .bg-white\/15,
+.light-theme .bg-white\/20 {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Primary buttons keep crisp contrast */
+.light-theme .bg-gradient-to-r.from-\[\#722035\],
+.light-theme button.bg-rose-600\/90,
+.light-theme .bg-emerald-600 {
+  color: #ffffff !important;
+}
+.light-theme .bg-gradient-to-r.from-\[\#722035\] *,
+.light-theme button.bg-rose-600\/90 *,
+.light-theme .bg-emerald-600 * {
+  color: #ffffff !important;
+}
+
+.light-theme ::-webkit-scrollbar-track {
+  background: #eaf0eb;
+}
+.light-theme ::-webkit-scrollbar-thumb {
+  background: #a4bea9;
+}
+.light-theme ::-webkit-scrollbar-thumb:hover {
+  background: #7d9d8b;
+}
+

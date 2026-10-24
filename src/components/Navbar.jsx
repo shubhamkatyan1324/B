@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Sparkles, Heart, Music, Cake, Gift, Image, BookOpen } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Heart, Music, Cake, Gift, Image, BookOpen, Sun, Moon } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { audioManager } from '../utils/audio';
 
-export default function Navbar({ recipientName, onEditName, onOpenLetter }) {
+export default function Navbar({ recipientName, theme = 'dark', onToggleTheme, onOpenLetter }) {
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,7 +44,7 @@ export default function Navbar({ recipientName, onEditName, onOpenLetter }) {
       audioManager.stopSong();
       setIsPlayingMusic(false);
     } else {
-      audioManager.playHappyBirthdaySong(() => {
+      audioManager.playSong(() => {
         setIsPlayingMusic(false);
       });
       setIsPlayingMusic(true);
@@ -79,14 +79,9 @@ export default function Navbar({ recipientName, onEditName, onOpenLetter }) {
                 <span className="font-handwriting text-lg sm:text-2xl text-pink-200 hidden xs:inline whitespace-nowrap">
                   Happy Birthday,
                 </span>
-                <button
-                  onClick={onEditName}
-                  title="Click to edit name"
-                  className="font-serif-display font-semibold text-sm sm:text-lg text-white hover:text-emerald-300 transition-colors flex items-center space-x-1 group truncate"
-                >
-                  <span className="truncate max-w-[100px] sm:max-w-[200px]">{recipientName}</span>
-                  <span className="text-xs text-emerald-400/70 group-hover:text-emerald-300 flex-shrink-0">✎</span>
-                </button>
+                <span className="font-serif-display font-semibold text-sm sm:text-lg text-white truncate">
+                  {recipientName}
+                </span>
               </div>
             </div>
           </div>
@@ -133,11 +128,11 @@ export default function Navbar({ recipientName, onEditName, onOpenLetter }) {
                   ? 'bg-blue-600/30 border-blue-400 text-blue-200 shadow-[0_0_15px_rgba(37,99,235,0.4)]'
                   : 'bg-white/5 border-white/15 text-zinc-300 hover:bg-white/10'
               }`}
-              title={isPlayingMusic ? 'Stop Birthday Song' : 'Play Birthday Song'}
+              title={isPlayingMusic ? 'Pause: Jab Koi Baat Bigad Jaaye' : 'Play: Jab Koi Baat Bigad Jaaye'}
             >
               <Music className={`w-3.5 h-3.5 ${isPlayingMusic ? 'animate-bounce text-blue-300' : ''}`} />
               <span className="hidden sm:inline">
-                {isPlayingMusic ? 'Playing' : 'Play Song'}
+                {isPlayingMusic ? 'Jab Koi Baat...' : 'Play Song'}
               </span>
               {isPlayingMusic && (
                 <span className="flex items-end space-x-0.5 h-3">
@@ -145,6 +140,22 @@ export default function Navbar({ recipientName, onEditName, onOpenLetter }) {
                   <span className="w-0.5 h-2/3 bg-blue-300 animate-pulse delay-75" />
                   <span className="w-0.5 h-4/5 bg-blue-200 animate-pulse delay-150" />
                 </span>
+              )}
+            </button>
+
+            {/* Theme Toggle (Light / Dark) */}
+            <button
+              onClick={() => {
+                audioManager.playPopSound();
+                if (onToggleTheme) onToggleTheme();
+              }}
+              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 fill-blue-500/20" />
+              ) : (
+                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 fill-amber-300/20" />
               )}
             </button>
 

@@ -164,7 +164,7 @@ export default function VirtualGiftBox({ recipientName }) {
             {/* Caption & Sentiment */}
             <div className="mt-5 text-center px-2">
               <h3 className="text-xl sm:text-2xl font-serif-display font-bold text-white mb-1.5">
-                The Best Gift is You ✨
+                Our first pic together ✨
               </h3>
               <p className="font-handwriting text-xl sm:text-2xl text-pink-200 mb-4 leading-snug">
                 "Dressed in festive smiles, making every heartbeat count."

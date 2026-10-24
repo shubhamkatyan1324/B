@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { X, Heart, Sparkles, Edit3, Check } from 'lucide-react';
+import { X, Heart, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { audioManager } from '../utils/audio';
 
 export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) {
   const [isOpened, setIsOpened] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [letterBody, setLetterBody] = useState(
-    `From quiet strolls beneath arches of fairy lights to goofy selfies and laughter that catches us off guard—every single memory we create together is a treasure I hold close to my heart.\n\nOn your birthday, I want to remind you of how extraordinary you truly are. You bring a rare grace, contagious warmth, and vibrant beauty into every room you enter. Thank you for being my constant, my favorite adventure companion, and the brightest spark in my world.\n\nMay this year unfold with boundless joy, fulfilled wishes, good health, and a million new memories waiting just around the corner.`
-  );
+  const letterBody =
+    `Babe many many happy returns of the Day.... Pichle 7 saal tumhare hone se mera jeevan kitna behtar hua h woh ham shabd mei express nhi kar sakte\n\nAur saath mei ghumne, enjoy karne toh acha lagta hi h.. Kyuki woh har kisi ke sath nhi lagta awkward nhi hota tere sath kabhi\n\nBut jo main chiz hai woh ki tum mera emotional support ho jab meko duniya dhoop lagta h toh mai tere paas Shadow keliye aata hu\n\nHar bday mei sath rhenge tumhare babe aur tum bhi sath dena jeevan bhar`;
 
   if (!isOpen) return null;
 
@@ -65,38 +63,19 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
         /* Unfolded Letter */
         <div className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto bg-[#faf8f5] text-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl border-4 border-[#e2d9cc]">
           {/* Letterhead */}
-          <div className="flex items-center justify-between border-b border-zinc-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
-            <div>
-              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-emerald-800 block">
-                Birthday Note • Special Edition
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-handwriting text-rose-900 mt-1">
-                Dearest {recipientName},
-              </h2>
-            </div>
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className="p-1.5 sm:p-2 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-600 text-xs font-medium flex items-center space-x-1 transition-colors"
-              title={isEditing ? 'Save edits' : 'Edit note'}
-            >
-              {isEditing ? <Check className="w-4 h-4 text-emerald-600" /> : <Edit3 className="w-4 h-4" />}
-              <span>{isEditing ? 'Done' : 'Edit'}</span>
-            </button>
+          <div className="border-b border-zinc-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-emerald-800 block">
+              Birthday Note • Special Edition
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-handwriting text-rose-900 mt-1">
+              Dearest {recipientName},
+            </h2>
           </div>
 
           {/* Letter Body */}
-          {isEditing ? (
-            <textarea
-              value={letterBody}
-              onChange={(e) => setLetterBody(e.target.value)}
-              rows={8}
-              className="w-full p-3 sm:p-4 rounded-xl border border-zinc-300 bg-white font-serif-display text-zinc-800 text-sm sm:text-base leading-relaxed focus:outline-none focus:border-rose-700"
-            />
-          ) : (
-            <div className="font-serif-display text-zinc-700 text-sm sm:text-lg leading-relaxed whitespace-pre-line mb-6 sm:mb-8 font-light">
-              {letterBody}
-            </div>
-          )}
+          <div className="font-serif-display text-zinc-700 text-sm sm:text-lg leading-relaxed whitespace-pre-line mb-6 sm:mb-8 font-light">
+            {letterBody}
+          </div>
 
           {/* Signature */}
           <div className="border-t border-zinc-200 pt-4 sm:pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

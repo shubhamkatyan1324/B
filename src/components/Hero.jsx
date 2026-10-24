@@ -23,20 +23,6 @@ export default function Hero({ recipientName, onBlowCandlesClick, onOpenLetter }
       <div className="absolute bottom-1/4 left-1/3 w-60 sm:w-72 h-60 sm:h-72 bg-[#f472b6]/15 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style={{ animationDelay: '1s' }} />
 
       <div className="relative z-10 max-w-6xl mx-auto text-center flex flex-col items-center w-full">
-        {/* Floating Top Badge */}
-        <div
-          onClick={handleQuickCheer}
-          className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-emerald-950/60 via-blue-950/60 to-rose-950/60 border border-white/15 backdrop-blur-md shadow-lg mb-4 sm:mb-6 hover:scale-105 active:scale-95 transition-transform cursor-pointer"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" style={{ animationDuration: '6s' }} />
-          <span className="text-[11px] sm:text-sm font-medium tracking-wide bg-gradient-to-r from-pink-200 via-white to-emerald-200 bg-clip-text text-transparent">
-            Today is All About Celebrating YOU ✨
-          </span>
-          <span className="text-[10px] sm:text-xs bg-rose-500/20 text-rose-300 px-1.5 sm:px-2 py-0.5 rounded-full border border-rose-500/30 font-semibold hidden xs:inline">
-            Special Edition
-          </span>
-        </div>
-
         {/* Big Celebratory Typography */}
         <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-serif-display font-bold tracking-tight text-white mb-3 sm:mb-4 leading-tight px-2">
           Happy Birthday,{' '}
@@ -138,26 +124,6 @@ export default function Hero({ recipientName, onBlowCandlesClick, onOpenLetter }
             <Heart className="w-4 h-4 text-emerald-300 fill-emerald-300" />
             <span>Birthday Note</span>
           </button>
-        </div>
-
-        {/* Quick Highlights / Stats Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-6 mt-10 sm:mt-14 max-w-4xl w-full px-2">
-          <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl glass-panel-sage text-center">
-            <span className="block text-xl sm:text-3xl font-serif-display font-bold text-emerald-300">365+</span>
-            <span className="text-[10px] sm:text-xs text-zinc-300 uppercase tracking-wider font-medium">Days of Sunshine</span>
-          </div>
-          <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl glass-panel-azul text-center">
-            <span className="block text-xl sm:text-3xl font-serif-display font-bold text-blue-300">18 Photos</span>
-            <span className="text-[10px] sm:text-xs text-zinc-300 uppercase tracking-wider font-medium">Memories</span>
-          </div>
-          <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl glass-panel-wine text-center">
-            <span className="block text-xl sm:text-3xl font-serif-display font-bold text-rose-300">100%</span>
-            <span className="text-[10px] sm:text-xs text-zinc-300 uppercase tracking-wider font-medium">Pure Happiness</span>
-          </div>
-          <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl glass-panel text-center">
-            <span className="block text-xl sm:text-3xl font-serif-display font-bold text-amber-300">∞</span>
-            <span className="text-[10px] sm:text-xs text-zinc-300 uppercase tracking-wider font-medium">Love & Magic</span>
-          </div>
         </div>
       </div>
     </section>
