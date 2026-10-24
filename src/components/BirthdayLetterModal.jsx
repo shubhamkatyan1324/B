@@ -8,6 +8,16 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
   const letterBody =
     `Babe many many happy returns of the Day.... Pichle 7 saal tumhare hone se mera jeevan kitna behtar hua h woh ham shabd mei express nhi kar sakte\n\nAur saath mei ghumne, enjoy karne toh acha lagta hi h.. Kyuki woh har kisi ke sath nhi lagta awkward nhi hota tere sath kabhi\n\nBut jo main chiz hai woh ki tum mera emotional support ho jab meko duniya dhoop lagta h toh mai tere paas Shadow keliye aata hu\n\nHar bday mei sath rhenge tumhare babe aur tum bhi sath dena jeevan bhar`;
 
+  // Handle ESC key to close modal
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleBreakSeal = () => {
@@ -25,21 +35,41 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      {/* Close button */}
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in"
+      onClick={onClose}
+    >
+      {/* Prominent floating Close button */}
       <button
         onClick={onClose}
-        className="absolute top-3 right-3 sm:top-5 sm:right-5 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-50"
+        className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[110] flex items-center space-x-1.5 px-3.5 py-2 rounded-full bg-black/80 hover:bg-black text-white border border-white/25 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95 group"
+        title="Close (Esc)"
       >
-        <X className="w-5 h-5 sm:w-6 sm:h-6" />
+        <X className="w-5 h-5 text-rose-300 group-hover:text-rose-200" />
+        <span className="text-xs font-semibold tracking-wide">Close (Esc)</span>
       </button>
 
       {!isOpened ? (
         /* Envelope With Wax Seal */
         <div
-          onClick={handleBreakSeal}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleBreakSeal();
+          }}
           className="relative max-w-md w-full bg-gradient-to-br from-[#1e2a33] to-[#121c23] border border-white/20 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl text-center cursor-pointer hover:scale-105 active:scale-95 transition-all group"
         >
+          {/* Card Close Cross */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
           <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 rounded-full bg-[#722035] border-2 border-amber-300 shadow-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform">
             <Heart className="w-7 h-7 sm:w-8 sm:h-8 text-amber-200 fill-amber-200" />
           </div>
@@ -61,9 +91,21 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
         </div>
       ) : (
         /* Unfolded Letter */
-        <div className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto bg-[#faf8f5] text-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl border-4 border-[#e2d9cc]">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto bg-[#faf8f5] text-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl border-4 border-[#e2d9cc]"
+        >
+          {/* Prominent Card-Corner Close Cross Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-3.5 right-3.5 sm:top-6 sm:right-6 p-2 rounded-full bg-zinc-200/90 hover:bg-rose-100 text-zinc-700 hover:text-rose-800 transition-all hover:scale-110 active:scale-95 border border-zinc-300/80 shadow-md"
+            title="Close Letter"
+          >
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
           {/* Letterhead */}
-          <div className="border-b border-zinc-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
+          <div className="border-b border-zinc-200 pb-3 sm:pb-4 mb-4 sm:mb-6 pr-10">
             <h2 className="text-2xl sm:text-4xl font-handwriting text-rose-900 mt-1">
               Dearest {recipientName},
             </h2>
@@ -81,15 +123,25 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
               <span className="font-handwriting text-2xl sm:text-3xl text-rose-800 font-bold">Forever Yours ❤️</span>
             </div>
 
-            <button
-              onClick={() => {
-                audioManager.playChime(true);
-                confetti({ particleCount: 60, spread: 70 });
-              }}
-              className="w-full sm:w-auto px-4 py-2 rounded-full bg-[#722035] hover:bg-[#881337] text-white text-xs font-semibold shadow-md transition-colors text-center"
-            >
-              Send Hugs 🤗
-            </button>
+            <div className="flex items-center space-x-2 w-full sm:w-auto">
+              <button
+                onClick={onClose}
+                className="flex-1 sm:flex-none px-4 py-2 rounded-full bg-zinc-200 hover:bg-zinc-300 text-zinc-700 text-xs font-semibold shadow-sm transition-colors text-center flex items-center justify-center space-x-1"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Close</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  audioManager.playChime(true);
+                  confetti({ particleCount: 60, spread: 70 });
+                }}
+                className="flex-1 sm:flex-none px-4 py-2 rounded-full bg-[#722035] hover:bg-[#881337] text-white text-xs font-semibold shadow-md transition-colors text-center"
+              >
+                Send Hugs 🤗
+              </button>
+            </div>
           </div>
         </div>
       )}
