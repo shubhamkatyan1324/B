@@ -42,6 +42,19 @@ export default function VirtualGiftBox({ recipientName }) {
     });
   };
 
+  // Escape key listener for fullscreen X.jpg view
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsFullscreen(false);
+      }
+    };
+    if (isFullscreen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
   return (
     <section id="gifts" className="relative py-16 sm:py-24 px-4 max-w-5xl mx-auto overflow-hidden">
       {/* Background ambient glow */}
@@ -126,7 +139,8 @@ export default function VirtualGiftBox({ recipientName }) {
               <img
                 src="/pics/X.jpg"
                 alt="Special Birthday Surprise Memory"
-                className="w-full h-auto max-h-[65vh] object-cover sm:object-contain rounded-xl transition-transform duration-500 group-hover:scale-102"
+                onClick={() => setIsFullscreen(true)}
+                className="w-full h-auto max-h-[65vh] object-cover sm:object-contain rounded-xl transition-transform duration-500 group-hover:scale-102 cursor-pointer"
               />
 
               {/* Quick actions overlay buttons on photo */}
@@ -182,27 +196,51 @@ export default function VirtualGiftBox({ recipientName }) {
         </div>
       )}
 
-      {/* FULLSCREEN POPUP MODAL FOR X.jpg */}
+      {/* FULLSCREEN POPUP MODAL FOR X.jpg (High z-index, prominent close, backdrop click close) */}
       {isFullscreen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-md animate-fade-in">
+        <div
+          onClick={() => setIsFullscreen(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/95 backdrop-blur-md animate-fade-in"
+        >
+          {/* Top-Right Screen Close Button */}
           <button
             onClick={() => setIsFullscreen(false)}
-            className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-50"
-            title="Close"
+            className="fixed top-3 right-3 sm:top-5 sm:right-6 flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white font-medium text-xs sm:text-sm backdrop-blur-lg border border-white/30 shadow-2xl transition-all hover:scale-105 active:scale-95 z-[110]"
+            title="Close (Press Esc)"
           >
-            <X className="w-6 h-6" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            <span>Close (Esc)</span>
           </button>
 
-          <div className="relative max-w-2xl w-full max-h-[90vh] flex flex-col items-center">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-2xl w-full max-h-[90vh] flex flex-col items-center bg-[#111923] p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-white/20 shadow-2xl"
+          >
+            {/* Close cross directly on card header */}
+            <button
+              onClick={() => setIsFullscreen(false)}
+              className="absolute top-3 right-3 p-2 rounded-full bg-black/75 hover:bg-rose-600 text-white border border-white/20 backdrop-blur-md transition-all shadow-lg z-30"
+              title="Close"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+
             <img
               src="/pics/X.jpg"
               alt="Special Memory Fullscreen"
-              className="max-h-[80vh] w-auto rounded-2xl shadow-2xl border border-white/20 object-contain"
+              className="max-h-[72vh] w-auto rounded-xl sm:rounded-2xl shadow-2xl border border-white/10 object-contain"
             />
             <div className="mt-4 text-center">
-              <span className="font-handwriting text-2xl sm:text-3xl text-pink-200">
+              <span className="font-handwriting text-xl sm:text-3xl text-pink-200 block">
                 Happy Birthday, {recipientName}! Forever Cherished ❤️
               </span>
+              <button
+                onClick={() => setIsFullscreen(false)}
+                className="mt-3 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white text-xs font-medium border border-white/20 transition-all inline-flex items-center space-x-1"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Go Back</span>
+              </button>
             </div>
           </div>
         </div>
@@ -210,3 +248,4 @@ export default function VirtualGiftBox({ recipientName }) {
     </section>
   );
 }
+
