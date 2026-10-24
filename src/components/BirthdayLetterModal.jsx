@@ -64,9 +64,6 @@ export default function BirthdayLetterModal({ isOpen, onClose, recipientName }) 
         <div className="relative max-w-2xl w-full max-h-[85vh] overflow-y-auto bg-[#faf8f5] text-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-2xl border-4 border-[#e2d9cc]">
           {/* Letterhead */}
           <div className="border-b border-zinc-200 pb-3 sm:pb-4 mb-4 sm:mb-6">
-            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-emerald-800 block">
-              Birthday Note • Special Edition
-            </span>
             <h2 className="text-2xl sm:text-4xl font-handwriting text-rose-900 mt-1">
               Dearest {recipientName},
             </h2>
