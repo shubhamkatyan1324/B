@@ -33,29 +33,16 @@ export default function Footer({ recipientName }) {
         </div>
 
         <h3 className="text-xl sm:text-3xl font-serif-display font-bold text-white mb-2">
-          Here's To You, {recipientName} 🥂
+          Here's to you, Babe 🥂
         </h3>
-        <p className="text-xs sm:text-sm text-zinc-400 max-w-md font-light mb-5 sm:mb-6 px-4">
+        <p className="text-xs sm:text-sm text-zinc-400 max-w-md font-light mb-6 px-4">
           May your year ahead be as radiant, kind, and beautiful as the memories we share together.
         </p>
 
-        {/* Modern Color Palette Indicator */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:space-x-2 mb-6 sm:mb-8 bg-white/5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/10 text-[11px] sm:text-xs text-zinc-400">
-          <span>Palette:</span>
-          <span className="flex items-center space-x-1.5">
-            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#7d9d8b]" title="Sage Green" />
-            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#2563eb]" title="Azul" />
-            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#722035]" title="Wine Red" />
-            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#fce7f3]" title="Light Pink" />
-          </span>
-          <span className="text-zinc-500">• Tailored with Love</span>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-between w-full max-w-4xl pt-4 sm:pt-6 border-t border-white/5 text-xs text-zinc-500 gap-3">
-          <span>Created with endless love & warm wishes ✨</span>
+        <div className="flex items-center justify-center w-full max-w-4xl pt-4 sm:pt-6 border-t border-white/5 text-xs text-zinc-500">
           <button
             onClick={scrollToTop}
-            className="flex items-center space-x-1 text-zinc-400 hover:text-white transition-colors"
+            className="flex items-center space-x-1 text-zinc-400 hover:text-white transition-colors py-1.5 px-4 rounded-full hover:bg-white/5"
           >
             <span>Back to top</span>
             <ArrowUp className="w-3.5 h-3.5" />
